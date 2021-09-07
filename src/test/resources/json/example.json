@@ -1,0 +1,17 @@
+{
+  "Name": "Luis",
+  "LastName":"Villarroel",
+  "Age": 30,
+  "Profession": "Lic. Sistemas",
+  "Address": ["Address 1", "Address 2", "Address 3"],
+  "Nationality" : [
+    {
+      "Country" : "India",
+      "Data" : {
+        "Capital" : "New Delhi",
+        "Altitud" : 343,
+        "Latitud" : 343
+      }
+    }
+  ]
+}
