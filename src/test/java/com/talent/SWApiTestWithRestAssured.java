@@ -1,5 +1,6 @@
 package com.talent;
 
+import com.talent.bind.BaseApiResponse;
 import io.restassured.RestAssured;
 import org.testng.annotations.*;
 
@@ -8,7 +9,7 @@ import static org.hamcrest.Matchers.*;
 public class SWApiTestWithRestAssured {
     @Test
     public void requestAreSourcesThenLinkToReturn(){
-        String body = RestAssured
+        BaseApiResponse baseApiResponse = RestAssured
                 .given()
                 .baseUri("https://swapi.dev/api" +
                         "" +
@@ -37,6 +38,20 @@ public class SWApiTestWithRestAssured {
                 .body("starships", response -> notNullValue())
                 .body("species", response -> notNullValue())
                 .body("planets", response -> notNullValue())
-                .and().extract().body().asString();
+                .and().extract().body().as(BaseApiResponse.class);
+
+        RestAssured
+                .given()
+                .queryParam("format", "json")
+                .log().all()
+                .when()
+                .post(baseApiResponse.getSpecies())
+                .then()
+                .log().all()
+                .and()
+                .assertThat()
+                .statusCode(is(equalTo(405)));
+
     }
 }
+
