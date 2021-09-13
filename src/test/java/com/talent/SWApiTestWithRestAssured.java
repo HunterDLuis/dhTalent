@@ -1,25 +1,42 @@
 package com.talent;
 
 import com.talent.bind.BaseApiResponse;
+import com.talent.model.People;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import org.testng.Assert;
 import org.testng.annotations.*;
 
 import static io.restassured.config.LogConfig.logConfig;
 import static io.restassured.config.RestAssuredConfig.config;
 import static org.hamcrest.Matchers.*;
 
-public class SWApiTestWithRestAssured {
+public class SWApiTestWithRestAssured extends BaseApi{
+
+    private static People people = new People();
+
+    @BeforeClass
+    public static void setUp(){
+        Response response = getRequestResponse("people/1/");
+        people.name = response.path("name");
+        people.height = response.path("height");
+    }
 
     @Test
-    public void whenRequestingAResourceThenLinksToResourcesMustBeReturned(){
-        RestAssured
-                .given()
-                .queryParam("format", "json")
-                .config(config().logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
-                .when().get("https://swapi.dev/api/planets/?format=json")
-                .then().assertThat()
-                .statusCode(is(equalTo(200)));
+    public void getTestName(){
+        Assert.assertEquals("Luke Skywalker", people.name);
     }
+
+//    @Test
+//    public void whenRequestingAResourceThenLinksToResourcesMustBeReturned(){
+//        RestAssured
+//                .given()
+//                .queryParam("format", "json")
+//                .config(config().logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
+//                .when().get("https://swapi.dev/api/planets/?format=json")
+//                .then().assertThat()
+//                .statusCode(is(equalTo(200)));
+//    }
 
 //    @Test
 //    public void requestAreSourcesThenLinkToReturn(){
